@@ -1,8 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from unidecode import unidecode
-import unicodedata
 from .models import Topico
 from .models import Usuario
 from .models import Comentario
@@ -39,12 +38,6 @@ class HomePageView(View):
         """Cria um comentário no Comente Sobre."""
         if request.POST.get('comentario') != None and request.POST.get('nome') != None and request.POST.get('email') != None and request.POST.get('id_topico') != None:
             comentario = create_comentario(request.POST)
-            return redirect('home_with_param', nome_topico=comentario.id_topico.name, id_topico=comentario.id_topico.id)
-        
-        if request.POST.get('curtida') == 'True' and request.POST.get('id_comentario') != None:
-            comentario = Comentario.objects.get(id=request.POST.get('id_comentario'))
-            comentario.curtidas += 1
-            comentario.save()
             return redirect('home_with_param', nome_topico=comentario.id_topico.name, id_topico=comentario.id_topico.id)
 
         return HttpResponse("Erro: Dados insuficientes para criar um comentário.", status=400)
@@ -157,3 +150,11 @@ def ordenar_comentarios(order, topico, nome_usuario=None):
         comentarios += list(comentarios_outros)
 
     return comentarios
+
+def like_comment(request):
+    if request.method == 'POST':
+        id_comentario = request.POST.get('id_comentario')
+        comentario = Comentario.objects.get(id=id_comentario)
+        comentario.curtidas += 1
+        comentario.save()
+        return JsonResponse({'curtidas': comentario.curtidas})

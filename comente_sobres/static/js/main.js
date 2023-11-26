@@ -25,3 +25,20 @@ function hideInputUsuario(){
     document.getElementById('buttonSubmit').style.display = 'none';
     document.getElementById('nameUser').style.display = 'none';
 }
+
+jQuery(document).ready(function() {
+    jQuery('.like-button').click(function() {
+        let commentId = jQuery(this).data('id');
+        jQuery.ajax({
+            url: '/comente-sobre/like_comment',
+            type: 'POST',
+            data: {
+                'id_comentario': commentId,
+                'csrfmiddlewaretoken': jQuery('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                jQuery('#likeCount' + commentId).text(response.curtidas);
+            }
+        });
+    });
+});
