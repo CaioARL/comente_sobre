@@ -23,7 +23,7 @@
 
     {% if topico %}
     <div class="headerTopico">
-        <a href="/comente-sobre/search?topico={{topico}}">
+        <a href="/comente-sobre/search?nome_topico={{topico.name}}">
             <h1>Tópico: {{topico}}</h1>
         </a>
         <div id="comentar" class="comentar" data-bs-toggle="modal" data-bs-target="#comentarioModal">Sobre o que deseja
@@ -33,14 +33,16 @@
 
     <hr class="hrSolid">
 
-
+    {% if comentarios %}
     <div class="comentarios">
         <div class="opcoes form-container">
-            <form action="/comente-sobre/home/{{topico}}" method="GET">
-                   <select name="order" id="orderSelect" onchange="handleSelectionChange()">
+            <form action="/comente-sobre/home/{{topico.name}}/{{topico.id}}" method="GET">
+                <select name="order" id="orderSelect" onchange="handleSelectionChange()">
+                    <option id="emptySelect" value="" selected>---</option>
                     <option value="recente" {% if order == 'recente' %}selected{% endif %}>Mais Recentes</option>
+                    <option value="antigo" {% if order == 'antigo' %}selected{% endif %}>Mais Antigos</option>
                     <option value="popular" {% if order == 'popular' %}selected{% endif %}>Mais Populares</option>
-                    <option value="usuario" {% if order == 'usuario' %}selected{% endif %}>Usuário específico</option>
+                    <option value="usuario">Usuário específico</option>
                 </select>
                 <div class="userOrderContainer">
                     <input id="nameUser" type="text" style="display: none;" name="nameUser">
@@ -49,6 +51,7 @@
         </div>
         </form>
     </div>
+    {% endif %}
 
     {% for comentario in comentarios %}
     <ul>
@@ -80,12 +83,11 @@
 
 
     <footer id="footer" class="footer">
-        <a class="logo" href="#">Comente Sobre</a>
+        <a class="logo" href="/comente-sobre/search">Comente Sobre</a>
         <div class="footer-center">
             <div class="bloco">
                 <a class="tag">NOS SIGA</a>
-                <a class="links" href="#">GitHub</a>
-                <a class="links" href="#">Link1</a>
+                <a class="links" href="https://github.com/CaioARL/comente_sobre/tree/master">GitHub</a>
             </div>
             <div class="bloco">
                 <a class="tag">SOBRE NÓS</a>
@@ -98,7 +100,6 @@
     </footer>
 
 
-    <!-- Modal -->
     <!-- Modal -->
     <div class="modal fade" id="comentarioModal" tabindex="-1" aria-labelledby="comentarioModalLabel"
         aria-hidden="true">
@@ -124,7 +125,7 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" name="email" required>
                         </div>
-                        <input type="hidden" name="topico" value="{{ topico.id }}">
+                        <input type="hidden" name="id_topico" value="{{ topico.id }}">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                             <button type="submit" class="btn btn-primary">Publicar</button>

@@ -39,7 +39,7 @@
             <h2>Qual tópico deseja pesquisar?</h2>
             <div class="BPesquisa">
                 <form action="/comente-sobre/search" method="GET">
-                    <input type="text" name="topico" placeholder="Buscar tópicos...">
+                    <input type="text" name="nome_topico" placeholder="Buscar tópicos...">
                     <button class="submit" onclick="Ver(event)">Buscar</button>
                 </form>
             </div>
@@ -59,7 +59,7 @@
             <h2>Tópicos Recentes</h2>
             <ul>
                 {% for topico in topicos %}
-                    <a href="{% url 'home_with_param' topico=topico %}" class="btn btn-result">{{ topico.name }}</a>
+                    <a href="{% url 'home_with_param' nome_topico=topico id_topico=topico.id %}" class="btn btn-result">{{ topico.name }}</a>
                     <p>Por: <span class="creator-name">{{ topico.usuario_added.name }} -> {{topico.usuario_added.email}}</span></p>
                 {% endfor %}
             </ul>
@@ -82,7 +82,7 @@
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="topico" class="form-label">Tópico</label>
-                                <input type="text" class="form-control" name="topico" required>
+                                <input type="text" class="form-control" name="nome_topico" required>
                             </div>
                             <div class="mb-3">
                                 <label for="nome" class="form-label">Nome</label>
